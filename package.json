@@ -1,0 +1,25 @@
+{
+  "name": "seed-store-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Clara0919/seed-store-node.git"
+  },
+  "author": "clara",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Clara0919/seed-store-node/issues"
+  },
+  "homepage": "https://github.com/Clara0919/seed-store-node#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.11.0"
+  }
+}
