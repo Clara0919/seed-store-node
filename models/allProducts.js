@@ -1,5 +1,5 @@
 const sequelize = require('sequelize');
-const database = require("../database")
+const database = require("../utils/database")
 
 //定義資料結構
 const allProducts = database.define('allProducts', {
