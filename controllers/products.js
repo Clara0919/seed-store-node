@@ -6,6 +6,7 @@ const allProducts = require('../models/allProducts')
 // }
 
 const getAllProducts = (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
     allProducts.findAll().then((allData) => {
         res.status(200)
         return res.json({ message: '連接成功', data: allData })
