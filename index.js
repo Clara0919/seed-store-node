@@ -5,12 +5,16 @@ const database = require("./utils/database")
 const products = require("./products.json")
 const allProducts = require("./models/allProducts")
 const productsAPI = require("./routes/productsAPI")
+const bestFlowerAPI = require("./routes/BestFlowerAPI")
+const forBeginnerAPI = require("./routes/ForBeginnerAPI")
 
 const app = express() //調用 express ，返回值是 app 服務實例
 
 //宣告全域中介軟體
 app.use(cors())
 app.use(productsAPI)
+app.use(bestFlowerAPI)
+app.use(forBeginnerAPI)
 
 //把資料匯入資料庫
 // database.sync({ force: true }).then(() => {
