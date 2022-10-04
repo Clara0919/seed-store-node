@@ -11,7 +11,7 @@ const allUsers = database.define("allUsers", { //第一個參數是資料庫名�
     userName: {
         type: sequelize.STRING,
         allowNull: false,
-        unique: true,
+
     },
     email: {
         type: sequelize.STRING,
