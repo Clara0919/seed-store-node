@@ -4,9 +4,8 @@ const authController = require("../controllers/auth")
 const router = express.Router()
 
 router.post('/login', authController.postLogin)
-// router.get('/loginInfo', authController.getLoginInfo)
 router.post('/signup', authController.postSignUp)
-router.post('/logout', authController.postLogout)
+router.get('/logout', authController.getLogout)
 
 function auth(req, res, next) {
     if (req.session.userName) {

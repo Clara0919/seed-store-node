@@ -11,8 +11,8 @@ const postLogin = (req, res) => {
         } else if (user.password === password) {
             req.session.isLogin = true
             req.session.userName = user.userName //把登入成功 user的userName 傳入session store 中儲存
-            //console.log(req.session) session 裡面會多出isLogin、userName兩個資訊
-            // console.log(req.sessionID)
+            console.log(req.session) //session 裡面會多出isLogin、userName兩個資訊
+            console.log(req.sessionID)
             res.send({
                 loginSuccess: 0
             }) //登入成功
@@ -28,33 +28,39 @@ const postLogin = (req, res) => {
 
 const getInfo = (req, res) => {
     const userName = req.session.userName
-    res.send({ user: userName })
-
+    const isLogin = req.session.isLogin
+    res.send({ user: userName, isLogin: isLogin })
 }
-// const getLoginInfo = (req, res) => {
-//     const name = req.session.userName
-//     const loginStatus = req.session.isLogin
-//     res.send([{ name: name }, { loginStatus: loginStatus }])
-// }
 
 
-const postLogout = (req, res) => {
-    req.session.isLogin = false
+const getLogout = (req, res) => {
+    req.session.destroy(() => {
+        console.log('session 已刪除')
+    })
 }
 
 const postSignUp = (req, res) => {
     const { userName, email, password, birthday } = req.body
-    allUsers.create({ userName: userName, email: email, password: password, birthday: birthday })
-        .then(() => {
-            console.log('註冊成功')
-            res.send({ signUpSuccess: 0 })
-        })
-        .catch((err) => {
-            console.log('註冊失敗', err.message);
+    allUsers.findOne({ where: { email: email } }).then((user) => {
+        if (user) {
             res.send({ signUpSuccess: 1 })
-        });
+        } else {
+            allUsers.create({ userName: userName, email: email, password: password, birthday: birthday })
+                .then((newUser) => {
+                    console.log('註冊成功')
+                    newUser.createCart()
+                    res.send({ signUpSuccess: 0 })
+                })
+                .catch((err) => {
+                    console.log('註冊失敗', err.message);
+                    res.send({ signUpSuccess: 1 })
+                });
+        }
+    })
+
+
 
 
 }
 
-module.exports = { postLogin, getInfo, postLogout, postSignUp } 
+module.exports = { postLogin, getInfo, getLogout, postSignUp } 
