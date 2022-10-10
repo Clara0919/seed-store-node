@@ -7,11 +7,14 @@ const postLogin = (req, res) => {
         if (!user) {
             req.session.isLogin = false
             res.send({ loginSuccess: 1 }) //此email尚未註冊
-
         } else if (user.password === password) {
             req.session.isLogin = true
-            req.session.userName = user.userName //把登入成功 user的userName 傳入session store 中儲存
-            console.log(req.session) //session 裡面會多出isLogin、userName兩個資訊
+            req.session.user = user // 把登入成功 user資料 傳入session store 中儲存
+            // req.session.userName = user.name
+            // req.session.save((err) => {
+            //     console.log("session save 失敗", err)
+            // })
+            console.log(req.session) //session 裡面會多出isLogin、user兩個資訊
             console.log(req.sessionID)
             res.send({
                 loginSuccess: 0
@@ -27,9 +30,9 @@ const postLogin = (req, res) => {
 
 
 const getInfo = (req, res) => {
-    const userName = req.session.userName
+    const userName = req.session.user.userName
     const isLogin = req.session.isLogin
-    res.send({ user: userName, isLogin: isLogin })
+    res.send({ userName: userName, isLogin: isLogin })
 }
 
 
