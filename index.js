@@ -12,6 +12,7 @@ const productsAPI = require("./routes/productsAPI")
 const bestFlowerAPI = require("./routes/bestFlowerAPI")
 const forBeginnerAPI = require("./routes/forBeginnerAPI")
 const authAPI = require("./routes/authAPI")
+const shopAPI = require("./routes/shopAPI")
 // const bodyParser = require('body-parser')
 /////////////////////////////////////////////////////////////////
 
@@ -34,9 +35,12 @@ app.use(session({            //把express-session寫在路由之前，所有的r
     }
 }))
 
-
+app.use(authAPI)
 app.use((req, res, next) => {
+    console.log(req.session.user)
+    console.log()
     if (!req.session.user) {
+        console.log('尚未登入')
         next()
     }
     else {
@@ -54,7 +58,8 @@ app.use((req, res, next) => {
 app.use(productsAPI)
 app.use(bestFlowerAPI)
 app.use(forBeginnerAPI)
-app.use(authAPI)
+
+app.use(shopAPI)
 
 
 

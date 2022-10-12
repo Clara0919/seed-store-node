@@ -2,7 +2,7 @@ const sequelize = require('sequelize');
 const database = require("../utils/database")
 
 //定義資料結構
-const allProducts = database.define('allProducts', {
+const Product = database.define('allProducts', {
     id: {
         type: sequelize.INTEGER,
         autoIncrement: true,
@@ -50,4 +50,4 @@ const allProducts = database.define('allProducts', {
 
 })
 
-module.exports = allProducts
+module.exports = Product

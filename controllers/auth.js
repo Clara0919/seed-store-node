@@ -10,12 +10,15 @@ const postLogin = (req, res) => {
         } else if (user.password === password) {
             req.session.isLogin = true
             req.session.user = user // 把登入成功 user資料 傳入session store 中儲存
+            req.user = user
+
+            // console.log(req.session.user)
             // req.session.userName = user.name
             // req.session.save((err) => {
             //     console.log("session save 失敗", err)
             // })
-            console.log(req.session) //session 裡面會多出isLogin、user兩個資訊
-            console.log(req.sessionID)
+            //console.log(req.session) session 裡面會多出isLogin、user兩個資訊
+            //console.log(req.sessionID)
             res.send({
                 loginSuccess: 0
             }) //登入成功
