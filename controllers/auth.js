@@ -1,7 +1,6 @@
 const allUsers = require("../models/allUsers")
 
 const postLogin = (req, res) => {
-    // res.set('Access-Control-Allow-Origin', '*');
     const { email, password } = req.body; //把使用者輸入的 email,pwd 放進req.body
     allUsers.findOne({ where: { email: email } }).then((user) => {
         if (!user) {

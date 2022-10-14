@@ -1,7 +1,22 @@
-const User = require('../models/allUsers')
-const Cart = require('../models/cart')
-const CartItem = require('../models/cartItem')
+
 const Product = require('../models/allProducts')
+
+const getIndex = (req, res) => {
+    Product.findAll()
+        .then((products) => {
+            res.status(200)
+            return res.json({message: '連接成功',data: products})
+            //用json是因為json檔案小，又有key and value，方便
+                // .render('index', {
+                //     path: '/',
+                //     pageTitle: 'Book Your Books online',
+                //     products
+                // });
+        })
+        .catch((err) => {
+            console.log('Product.findAll() error: ', err);
+        })
+};
 
 
 const getCart = (req, res) => {
@@ -20,14 +35,16 @@ const getCart = (req, res) => {
 //////把商品加入購物車//////
 
 const postCartAddItem = (req, res) => {
+    console.log('postCartAddItem',req.user);
     const { productId } = req.body
     console.log(productId)
-    let userCart = [];
+    let userCart;
     let newQuantity = 1;
     // console.log(req.user)
     req.user.getCart().then((cart) => {
+        // console.log('cart',cart)
         userCart = cart;
-        console.log(cart)
+        // console.log(userCart)
         return cart.getProducts({ where: { id: productId } });
     }).then((products) => {
         let product;
@@ -89,4 +106,4 @@ const postCartDeleteItem = (req, res, next) => {
         console.log(err)
     })
 }
-module.exports = { getCart, postCartAddItem, postCartDeleteItem }
+module.exports = { getIndex,getCart, postCartAddItem, postCartDeleteItem }
