@@ -58,26 +58,6 @@ app.use((req, res, next) => {
 });
 
 
-// app.use((req, res, next) => {
-//     console.log(req.session.user)
-//     console.log()
-//     if (!req.session.user) {
-//         console.log('尚未登入')
-//         next()
-//     }
-//     else {
-        //如果已登入的話，findByPk:find by primary key，用id去找，才能使用 User 模型提供的方法（例如 getCart()、create()、save()…）等等
-//         User.findByPk(req.session.user.id).then((user) => {
-//             req.user = user //取得 user 模型並儲存到全域（req.user）
-//             console.log(req.user)
-//             next()
-//         }).catch((err) => {
-//             console.log('中介軟體 findUserBySessionId 失敗', err)
-//         })
-//     }
-// }
-
-
 /////////////////////////////////////////////////////////////////
 
 //資料庫邏輯
@@ -97,7 +77,7 @@ app.use(shopAPI)
 ////////////////////////////////////////////////////////////////
 
 // 把產品、用戶資料匯入資料庫
-database.sync().then(() => { //{ force: true }
+database.sync( ).then(() => { //{ force: true }
     // Product.bulkCreate(products);
     // User.create({ userName: "Clara", email: "clara12345@gmail.com", password: "12345", birthday: "1998/09/19" })
     app.listen(3000,() => {

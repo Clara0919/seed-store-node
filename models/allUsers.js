@@ -1,7 +1,7 @@
 const sequelize = require("sequelize")
 const database = require("../utils/database")
 //////////////////////////////////////////////////////////
-const allUsers = database.define("allUsers", { //第一個參數是資料庫名稱
+const user = database.define("user", { //第一個參數是資料庫名稱
     id: {
         type: sequelize.INTEGER,
         autoIncrement: true,
@@ -28,4 +28,4 @@ const allUsers = database.define("allUsers", { //第一個參數是資料庫名�
     }
 })
 
-module.exports = allUsers
+module.exports = user

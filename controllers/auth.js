@@ -1,8 +1,8 @@
-const allUsers = require("../models/allUsers")
+const users = require("../models/allUsers")
 
 const postLogin = (req, res) => {
     const { email, password } = req.body; //把使用者輸入的 email,pwd 放進req.body
-    allUsers.findOne({ where: { email: email } }).then((user) => {
+    users.findOne({ where: { email: email } }).then((user) => {
         if (!user) {
             req.session.isLogin = false
             res.send({ loginSuccess: 1 }) //此email尚未註冊
@@ -33,8 +33,10 @@ const postLogin = (req, res) => {
 
 const getInfo = (req, res) => {
     const userName = req.session.user.userName
+    const userId=req.session.user.id
     const isLogin = req.session.isLogin
-    res.send({ userName: userName, isLogin: isLogin })
+    console.log(userName)
+    res.send({ userName: userName,userId:userId, isLogin: isLogin })
 }
 
 
@@ -46,11 +48,11 @@ const getLogout = (req, res) => {
 
 const postSignUp = (req, res) => {
     const { userName, email, password, birthday } = req.body
-    allUsers.findOne({ where: { email: email } }).then((user) => {
+    users.findOne({ where: { email: email } }).then((user) => {
         if (user) {
             res.send({ signUpSuccess: 1 })
         } else {
-            allUsers.create({ userName: userName, email: email, password: password, birthday: birthday })
+            users.create({ userName: userName, email: email, password: password, birthday: birthday })
                 .then((newUser) => {
                     console.log('註冊成功')
                     newUser.createCart()

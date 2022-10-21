@@ -1,22 +1,22 @@
 
 const Product = require('../models/allProducts')
 
-const getIndex = (req, res) => {
-    Product.findAll()
-        .then((products) => {
-            res.status(200)
-            return res.json({message: '連接成功',data: products})
-            //用json是因為json檔案小，又有key and value，方便
-                // .render('index', {
-                //     path: '/',
-                //     pageTitle: 'Book Your Books online',
-                //     products
-                // });
-        })
-        .catch((err) => {
-            console.log('Product.findAll() error: ', err);
-        })
-};
+// const getIndex = (req, res) => {
+//     Product.findAll()
+//         .then((products) => {
+//             res.status(200)
+//             return res.json({message: '連接成功',data: products})
+//             //用json是因為json檔案小，又有key and value，方便
+//                 // .render('index', {
+//                 //     path: '/',
+//                 //     pageTitle: 'Book Your Books online',
+//                 //     products
+//                 // });
+//         })
+//         .catch((err) => {
+//             console.log('Product.findAll() error: ', err);
+//         })
+// };
 
 
 const getCart = (req, res) => {
@@ -81,29 +81,35 @@ const postCartAddItem = (req, res) => {
 
 //////把商品從購物車中移除//////
 
-const postCartDeleteItem = (req, res, next) => {
-    const { productId } = req.body
+const postCartDeleteItem = (req, res) => {
+    const { productId } = req.body;
     let userCart;
-    req.user.getCart().then((cart) => {
-        userCart = cart
-        return cart.getProducts({ where: { productId } });
-    }).then((products) => {
-        const product = products[0]; //取第一筆（雖然本來應該就只會有一筆）這邊應該是要把陣列裡的物件取出來
-        return product.CartItem.destroy()
-    }).then(() => {
-        //處理總金額的部分
-        return userCart.getProducts().then((products) => {
-            if (products.length) {
-                const productsSums = products.map((product) => product.price * product.CartItem.quantity);
-                const amount = productsSums.reduce((accumulator, currentValue) => {
-                    return accumulator + currentValue
-                });
-                userCart.amount = amount;
-                return userCart.save();
-            }
+    req.user
+        .getCart()
+        .then((cart) => {
+            userCart = cart;
+            return cart.getProducts({ where: { id: productId }});
         })
-    }).catch((err) => {
-        console.log(err)
-    })
-}
-module.exports = { getIndex,getCart, postCartAddItem, postCartDeleteItem }
+        .then((products) => {
+            const product = products[0];
+            product.cartItem.destroy();
+            res.send(products)
+        })
+        .then(() => {
+            return userCart
+                .getProducts()
+                .then((products) => {
+                    if (products.length) {
+                        const productSums = products.map((product) => product.price * product.cartItem.quantity);
+                        const amount = productSums.reduce((accumulator, currentValue) => accumulator + currentValue);
+                        userCart.amount = amount;
+                        userCart.save();
+                    }
+                });
+        })
+        //.then(() => {
+           // res.redirect('/cart');
+       // })
+        .catch((err) => console.log(err));
+};
+module.exports = { getCart, postCartAddItem, postCartDeleteItem }
