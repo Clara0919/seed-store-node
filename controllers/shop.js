@@ -36,8 +36,9 @@ const getCart = (req, res) => {
 
 const postCartAddItem = (req, res) => {
     console.log('postCartAddItem',req.user);
-    const { productId } = req.body
-    console.log(productId)
+    const { productId,quantity } = req.body
+    // console.log(productId)
+    // console.log(quantity)
     let userCart;
     let newQuantity = 1;
     // console.log(req.user)
@@ -51,11 +52,15 @@ const postCartAddItem = (req, res) => {
         if (products.length > 0) { //如果有資料(陣列長度>0)，表示購物車已經有該product
             product = products[0]; //抓陣列的第一筆(也只會有一筆)
             const oldQuantity = product.cartItem.quantity;
-            newQuantity = oldQuantity + 1;
+            newQuantity = oldQuantity + quantity;
+            // console.log('存入的數量：'+newQuantity)
             return product
+        }else{
+            newQuantity=quantity
         }
         return Product.findByPk(productId);
     }).then((product) => {
+        console.log(newQuantity)
         return userCart.addProduct(product, {
             through: {
                 quantity: newQuantity
