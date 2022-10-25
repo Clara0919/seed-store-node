@@ -33,10 +33,10 @@ const postLogin = (req, res) => {
 
 const getInfo = (req, res) => {
     const userName = req.session.user.userName
-    const userId=req.session.user.id
+    const id=req.session.user.id
     const isLogin = req.session.isLogin
     console.log(userName)
-    res.send({ userName: userName,userId:userId, isLogin: isLogin })
+    res.send({ userName: userName,id:id, isLogin: isLogin })
 }
 
 

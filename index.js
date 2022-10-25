@@ -13,6 +13,8 @@ const bestFlowerAPI = require("./routes/bestFlowerAPI")
 const forBeginnerAPI = require("./routes/forBeginnerAPI")
 const authAPI = require("./routes/authAPI")
 const shopAPI = require("./routes/shopAPI")
+const Order = require('./models/order');
+const OrderItem = require('./models/orderItem');
 // const bodyParser = require('body-parser')
 /////////////////////////////////////////////////////////////////
 
@@ -65,6 +67,9 @@ User.hasOne(Cart);
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem })
 Product.belongsToMany(Cart, { through: CartItem })
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
 
 ////////////////////////////////////////////////////////////////
 app.use(authAPI)
@@ -77,7 +82,7 @@ app.use(shopAPI)
 ////////////////////////////////////////////////////////////////
 
 // 把產品、用戶資料匯入資料庫
-database.sync( ).then(() => { //{ force: true }
+database.sync().then(() => { // { force: true }
     // Product.bulkCreate(products);
     // User.create({ userName: "Clara", email: "clara12345@gmail.com", password: "12345", birthday: "1998/09/19" })
     app.listen(3000,() => {

@@ -1,23 +1,6 @@
 
 const Product = require('../models/allProducts')
 
-// const getIndex = (req, res) => {
-//     Product.findAll()
-//         .then((products) => {
-//             res.status(200)
-//             return res.json({message: '連接成功',data: products})
-//             //用json是因為json檔案小，又有key and value，方便
-//                 // .render('index', {
-//                 //     path: '/',
-//                 //     pageTitle: 'Book Your Books online',
-//                 //     products
-//                 // });
-//         })
-//         .catch((err) => {
-//             console.log('Product.findAll() error: ', err);
-//         })
-// };
-
 
 const getCart = (req, res) => {
     req.user.getCart().then((cart) => {
@@ -117,4 +100,58 @@ const postCartDeleteItem = (req, res) => {
        // })
         .catch((err) => console.log(err));
 };
-module.exports = { getCart, postCartAddItem, postCartDeleteItem }
+
+//////把購物車裡面的東西丟進訂單裡///////
+
+const postOrder = (req, res) => {
+    
+    let userCart;
+    let orderAmount = 0;
+    req.user
+        .getCart(
+           
+        )
+        .then((cart) => {
+           
+            userCart = cart;
+            orderAmount = cart.amount;
+            return cart.getProducts();
+        })
+        .then((products) => {
+           
+            return req.user
+                .createOrder({ amount: orderAmount })
+                .then((order) => {
+                    return order.addProducts(products.map((product) => {
+                        product.orderItem = { quantity: product.cartItem.quantity };
+                       
+                        return product ;
+                    }));
+                })
+                .then(() => {
+                    
+                    return userCart.setProducts(null);
+                })
+                .then(() => {
+                    
+                    res.send('訂單送出成功')
+                })
+                .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
+};
+
+
+
+//////拿訂單資料/////////
+
+const getOrders = (req, res) => {
+    req.user
+        .getOrders({ include: ['products']})
+        .then((orders) => {
+            console.log('orders', orders)
+            res.send(orders);
+        })
+        .catch((err) => console.log(err));
+};
+module.exports = { getCart, postCartAddItem, postCartDeleteItem,getOrders,postOrder }
