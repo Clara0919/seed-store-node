@@ -44,6 +44,8 @@ const getLogout = (req, res) => {
     req.session.destroy(() => {
         console.log('session 已刪除')
     })
+    res.send({ logoutSuccess: 0 })
+    
 }
 
 const postSignUp = (req, res) => {
