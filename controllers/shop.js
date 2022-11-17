@@ -19,12 +19,10 @@ const getCart = (req, res) => {
 
 const postCartAddItem = (req, res) => {
     console.log('postCartAddItem',req.user);
-    const { productId,quantity } = req.body
-    // console.log(productId)
-    // console.log(quantity)
+    const { productId,quantity } = req.body  //解構賦值 拿到productId,quantity 
     let userCart;
     let newQuantity = 1;
-    // console.log(req.user)
+   
     req.user.getCart().then((cart) => {
         // console.log('cart',cart)
         userCart = cart;
@@ -36,7 +34,7 @@ const postCartAddItem = (req, res) => {
             product = products[0]; //抓陣列的第一筆(也只會有一筆)
             const oldQuantity = product.cartItem.quantity;
             newQuantity = oldQuantity + quantity;
-            // console.log('存入的數量：'+newQuantity)
+            // console.log('存入的數量：'+ newQuantity)
             return product
         }else{
             newQuantity=quantity
@@ -109,31 +107,25 @@ const postOrder = (req, res) => {
     let orderAmount = 0;
     req.user
         .getCart(
-           
         )
         .then((cart) => {
-           
             userCart = cart;
             orderAmount = cart.amount;
             return cart.getProducts();
         })
-        .then((products) => {
-           
+        .then((products) => { 
             return req.user
                 .createOrder({ amount: orderAmount })
                 .then((order) => {
                     return order.addProducts(products.map((product) => {
                         product.orderItem = { quantity: product.cartItem.quantity };
-                       
                         return product ;
                     }));
                 })
                 .then(() => {
-                    
-                    return userCart.setProducts(null);
-                })
+                    return userCart.setProducts(null);  //清空購物車
+                }) 
                 .then(() => {
-                    
                     res.send('訂單送出成功')
                 })
                 .catch((err) => console.log(err));

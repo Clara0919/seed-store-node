@@ -34,9 +34,11 @@ const postLogin = (req, res) => {
 const getInfo = (req, res) => {
     const userName = req.session.user.userName
     const id=req.session.user.id
+    const email=req.session.user.email
+    const birthday=req.session.user.birthday
     const isLogin = req.session.isLogin
     console.log(userName)
-    res.send({ userName: userName,id:id, isLogin: isLogin })
+    res.send({ userName: userName,id:id,email:email,birthday:birthday,isLogin: isLogin })
 }
 
 

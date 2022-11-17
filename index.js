@@ -24,9 +24,9 @@ const app = express() //調用 express ，返回值是 app 服務實例
 
 //宣告全域中介軟體
 app.use(cors({ origin: 'http://localhost:8080', credentials: true }))
-app.use(express.urlencoded({ extended: false }))
-app.use(express.json())
-app.set('trust proxy', 1)
+app.use(express.urlencoded({ extended: false })) //for post request （ get 不需要） recognize the incoming Request Object as strings or arrays
+app.use(express.json()) //for post request （ get 不需要） recognize the incoming Request Object as a JSON Object.
+app.set('trust proxy', 1) //信任來自正面 Proxy 伺服器的第 1 個躍點就是用戶端。
 app.use(session({            //把express-session寫在路由之前，所有的request都會生成一個session並可以透過req.session這個變數來取得session內容，以及req.sessionID來取得session ID
     secret: 'BobaTheCat',
     name: 'session_id',

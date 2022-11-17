@@ -1,7 +1,7 @@
 const products = require('../models/allProducts')
 
 
-const getAllProducts = (req, res) => {  //這邊是 routes 裡 router 用到的 function(req,res)
+const getAllProducts = (req, res) => { 
     // res.set('Access-Control-Allow-Origin', '*');設定 res 的 header 解決 CORS 跨域問題
     products.findAll().then((allData) => {
         res.status(200)
